@@ -1,0 +1,36 @@
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  luarocks_pack:
+    name: pack-luarocks
+    with:
+      LUA_PACKAGE_NAME: lua-aho-corasick
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: leafo/gh-actions-lua@v10
+      with:
+        luaVersion: "5.1.5"
+    - uses: leafo/gh-actions-luarocks@v4
+      with:
+        luarocksVersion: "3.11.0"
+    - uses: little-core-labs/get-git-tag@v3.0.1
+      id: tagName
+      with:
+        tagRegex: "^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-((?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"  # Optional. Returns specified group text as tag name. Full tag string is returned if regex is not defined.
+        tagRegexGroup: 1 # Optional. Default is 1.
+    # Install some package
+    - name: prepare rockspec
+    - run: |
+        sed -i "s/version = .*/version = "version = \"${GIT_TAG_NAME}\""
+        mv lua-aho-corasick.rockspec lua-aho-corasick-${GIT_TAG_NAME}.rockspec
+    - name: install a module
+      run: luarocks make moonscript
+    - name: luarocks pack
+      run: luarocks pack lua-aho-corasick
+    - name: upload 
+      run: luarocks upload lua-aho-corasick-${GIT_TAG_NAME}.rockspec --api-key=${LUA_ROCKS_API_KEY}
+      secrets:
+        LUA_ROCKS_API_KEY: ${{ secrets.LUA_ROCKS_API_KEY }}
