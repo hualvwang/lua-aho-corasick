@@ -129,6 +129,6 @@ clean :
 	make clean -C tests
 
 install:
-	install -D -m 755 $(C_SO_NAME) $(DESTDIR)/$(SO_TARGET_DIR)/$(C_SO_NAME)
-	install -D -m 755 $(LUA_SO_NAME) $(DESTDIR)/$(SO_TARGET_DIR)/$(LUA_SO_NAME)
-	install -D -m 664 load_ac.lua $(DESTDIR)/$(LUA_TARGET_DIR)/load_ac.lua
+	install -D -m 755 $(C_SO_NAME) $(SO_TARGET_DIR)/$(C_SO_NAME)
+	install -D -m 755 $(LUA_SO_NAME) $(SO_TARGET_DIR)/$(LUA_SO_NAME)
+	install -D -m 664 load_ac.lua $(LUA_TARGET_DIR)/load_ac.lua
