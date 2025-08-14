@@ -11,9 +11,6 @@ C++ and Lua Implementation of the Aho-Corasick (AC) string matching algorithm
    homepage = "https://github.com/hualvwang/lua-aho-corasick/",
    license = "BSD-3-Clause license"
 }
-dependencies = {
-	"lua >= 5.1"
-}
 
 build = {
    type = "make",
